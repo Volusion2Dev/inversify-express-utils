@@ -139,7 +139,7 @@ export class InversifyExpressServer {
 
         constructors.forEach((constructor) => {
 
-            const name = constructor.name;
+            const name = typeof constructor.getName === "function" ? constructor.getName() : constructor.name;
 
             if (this._container.isBoundNamed(TYPE.Controller, name)) {
                 throw new Error(DUPLICATED_CONTROLLER_NAME(name));
@@ -170,7 +170,8 @@ export class InversifyExpressServer {
                     if (parameterMetadata) {
                         paramList = parameterMetadata[metadata.key] || [];
                     }
-                    let handler: express.RequestHandler = this.handlerFactory(controllerMetadata.target.name, metadata.key, paramList);
+                    let controllerName = typeof controllerMetadata.target.getName === "function" ? controllerMetadata.target.getName() : controllerMetadata.target.name;
+                    let handler: express.RequestHandler = this.handlerFactory(controllerName, metadata.key, paramList);
                     let routeMiddleware = this.resolveMidleware(...metadata.middleware);
                     this._router[metadata.method](
                         `${controllerMetadata.path}${metadata.path}`,

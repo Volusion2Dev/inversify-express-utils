@@ -170,7 +170,8 @@ export class InversifyExpressServer {
                     if (parameterMetadata) {
                         paramList = parameterMetadata[metadata.key] || [];
                     }
-                    let controllerName = typeof controllerMetadata.target.getName === "function" ? controllerMetadata.target.getName() : controllerMetadata.target.name;
+                    let controllerName = typeof controllerMetadata.target.getName === "function"
+                        ? controllerMetadata.target.getName() : controllerMetadata.target.name;
                     let handler: express.RequestHandler = this.handlerFactory(controllerName, metadata.key, paramList);
                     let routeMiddleware = this.resolveMidleware(...metadata.middleware);
                     this._router[metadata.method](
